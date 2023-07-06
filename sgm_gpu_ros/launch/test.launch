@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- <node name="bag_player" pkg="rosbag" type="play" args="-l $(find sgm_gpu)/test_input.bag"/> -->
+
+  <node name="sgm_gpu_node" pkg="sgm_gpu" type="sgm_gpu_node" output="screen">
+    <param name="image_transport" value="compressed"/>
+    <!-- <remap from="left_image" to="stereo_robot/mobile_base/camera/left/image_raw"/> -->
+    <!-- <remap from="right_image" to="stereo_robot/mobile_base/camera/right/image_raw"/> -->
+    <remap from="left_image" to="airsim_node/drone_1/front_left/Scene"/>
+    <remap from="right_image" to="airsim_node/drone_1/front_right/Scene"/>
+    <!-- <remap from="left_image" to="rgb/left"/> -->
+    <!-- <remap from="right_image" to="rgb/right"/> -->
+
+  </node>
+
+  <!-- <node name="input_viewer" pkg="image_view" type="image_view">
+    <param name="image_transport" value="compressed"/>
+    <remap from="image" to="stereo_robot/mobile_base/camera/left/image_raw"/>
+  </node> -->
+  <!-- <node name="disparity_viewer" pkg="image_view" type="disparity_view">
+    <remap from="image" to="sgm_gpu_node/disparity"/>
+  </node> -->
+</launch>
