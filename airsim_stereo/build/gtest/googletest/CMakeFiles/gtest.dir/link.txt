@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -Wall -Wextra -Wpedantic -Wstrict-null-sentinel -Wno-unused  -shared -Wl,-soname,libgtest.so -o ../lib/libgtest.so CMakeFiles/gtest.dir/src/gtest-all.cc.o  -lpthread 

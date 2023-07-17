@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/gs/airsim_ws/src/airsim_stereo/build/devel/setup.sh

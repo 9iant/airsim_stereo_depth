@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -Wall -Wextra -Wpedantic -Wstrict-null-sentinel -Wno-unused  -shared -Wl,-soname,libgmock.so -o ../lib/libgmock.so CMakeFiles/gmock.dir/src/gmock-all.cc.o  -Wl,-rpath,/home/gs/airsim_ws/src/airsim_stereo/build/gtest/lib ../lib/libgtest.so -lpthread 
