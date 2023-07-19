@@ -1,0 +1,105 @@
+{
+  "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/master/docs/settings.md",
+  "SettingsVersion": 1.2,
+  "SimMode": "Multirotor",
+  "InputMappings": {
+    "joy1_type": "xbox",    
+    "joy1_name": "Xbox One Controller",    
+    "joy1_config": "Xbox",   
+    "enable_api_control": true   
+},
+  "Vehicles": {
+    "drone_1": {
+      "VehicleType": "SimpleFlight",
+      "DefaultVehicleState": "Armed",
+      "Sensors": {
+        "Barometer": {
+          "SensorType": 1,
+          "Enabled" : true
+        },
+        "Imu": {
+          "SensorType": 2,
+          "Enabled" : true
+        },
+        "Gps": {
+          "SensorType": 3,
+          "Enabled" : true
+        },
+        "Magnetometer": {
+          "SensorType": 4,
+          "Enabled" : false
+        },
+        "Distance": {
+          "SensorType": 5,
+          "Enabled" : false
+        },
+        "Lidar": {
+          "SensorType": 6,
+          "Enabled" : false,
+          "NumberOfChannels": 16,
+          "RotationsPerSecond": 10,
+          "PointsPerSecond": 100000,
+          "X": 0, "Y": 0, "Z": -1,
+          "Roll": 0, "Pitch": 0, "Yaw" : 0,
+          "VerticalFOVUpper": 0,
+          "VerticalFOVLower": -0,
+          "HorizontalFOVStart": -90,
+          "HorizontalFOVEnd": 90,
+          "DrawDebugPoints": true,
+          "DataFrame": "SensorLocalFrame"
+        }
+      },
+      "Cameras": {
+        "front_left": {
+          "CaptureSettings": [
+            {
+              "PublishToRos": 1,
+              "ImageType": 0,
+              "Width": 320,
+              "Height": 240,
+              "FOV_Degrees": 90,
+              "DepthOfFieldFstop": 2.8,
+              "DepthOfFieldFocalDistance": 200.0, 
+              "DepthOfFieldFocalRegion": 200.0,
+              "TargetGamma": 1.5
+            }
+          ],
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "X": 0.25,
+          "Y": -0.1,
+          "Yaw": 0.0,
+          "Z": 0.3
+          },
+          "front_right": {
+          "CaptureSettings": [
+            {
+              "PublishToRos": 1,
+              "ImageType": 0,
+              "Width": 320,
+              "Height": 240,
+              "FOV_Degrees": 90,
+              "DepthOfFieldFstop": 2.8,
+              "DepthOfFieldFocalDistance": 200.0, 
+              "DepthOfFieldFocalRegion": 200.0,
+              "TargetGamma": 1.5
+            }
+          ],
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "X": 0.25,
+          "Y": 0.1,
+          "Yaw": 0.0,
+          "Z": 0.3
+          }
+      },
+      "X": 0, "Y": 0, "Z": 0,
+      "Pitch": 0, "Roll": 0, "Yaw": 0
+    }
+  },
+  "SubWindows": [
+    {"WindowID": 0, "ImageType": 0, "CameraName": "front_left", "Visible": true},
+    {"WindowID": 1, "ImageType": 0, "CameraName": "front_right", "Visible": true},
+    {"WindowID": 2, "ImageType": 4, "CameraName": "front_left", "Visible" :true}
+  ] 
+}

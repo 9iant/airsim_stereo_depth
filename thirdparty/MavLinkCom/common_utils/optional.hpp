@@ -7,9 +7,9 @@
 // The idea and interface is based on Boost.Optional library
 // authored by Fernando Luis Cacciola Carballal
 
-# ifndef ___OPTIONAL_HPP___
-# define ___OPTIONAL_HPP___
-
+#ifndef ___OPTIONAL_HPP___
+#define ___OPTIONAL_HPP___
+// clang-format off
 # include <utility>
 # include <type_traits>
 # include <initializer_list>
@@ -90,7 +90,7 @@
 #   define OPTIONAL_HAS_MOVE_ACCESSORS 0
 # endif
 
-# // In c++14 constexpr implies const, so we need to make non-const members also non-constexpr
+# // In C++11 constexpr implies const, so we need to make non-const members also non-constexpr
 # if (defined __cplusplus) && (__cplusplus == 201103L)
 #   define OPTIONAL_MUTABLE_CONSTEXPR
 # else
@@ -1038,5 +1038,5 @@ namespace std
 
 # undef TR2_OPTIONAL_REQUIRES
 # undef TR2_OPTIONAL_ASSERTED_EXPRESSION
-
-# endif //___OPTIONAL_HPP___
+// clang-format on
+#endif //___OPTIONAL_HPP___

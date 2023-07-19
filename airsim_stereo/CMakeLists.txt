@@ -5,7 +5,7 @@ project(airsim_stereo)
 # add_compile_options(-std=c++11)
 
 # set this to path to AirSim root folder if you want your catkin workspace in a custom directory
-set(AIRSIM_ROOT /home/gs/AirSim)
+set(AIRSIM_ROOT ${PROJECT_SOURCE_DIR}/../thirdparty)
 
 add_subdirectory("${AIRSIM_ROOT}/cmake/rpclib_wrapper" rpclib_wrapper)
 add_subdirectory("${AIRSIM_ROOT}/cmake/AirLib" AirLib)
