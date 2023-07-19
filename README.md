@@ -11,8 +11,8 @@ run airsim simulator and
 This code is roughly designed for research purposes, so the camera settings are hard-coded in ``airsim_stereo.cpp``.
 The implementation of retrieving settings from AirSim is planned for the future.
 
-Check your CUDA version and modify CMakeLists.txt.
-usually ``find_package(CUDA REQUIRED) `` is ok.
+Check your CUDA version and modify ``CMakeLists.txt``.
+usually ``find_package(CUDA REQUIRED)`` will be fine.
 
 
 
