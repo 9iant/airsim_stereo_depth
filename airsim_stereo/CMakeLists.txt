@@ -88,6 +88,8 @@ cuda_add_library(sgm_gpu
         src/sgm_gpu/left_right_consistency.cu
         src/sgm_gpu/median_filter.cu)
 
+add_library(airsim_settings_parser src/airsim_settings_parser.cpp)
+target_link_libraries(airsim_settings_parser ${catkin_LIBRARIES} AirLib)
 
 add_executable(airsim_stereo src/airsim_stereo.cpp)
-target_link_libraries(airsim_stereo sgm_gpu ${catkin_LIBRARIES} AirLib)
+target_link_libraries(airsim_stereo sgm_gpu ${catkin_LIBRARIES} AirLib airsim_settings_parser)
