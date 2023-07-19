@@ -6,7 +6,9 @@ macro(CommonTargetLink)
 endmacro(CommonTargetLink)
 
 macro(IncludeEigen)
-    include_directories(${AIRSIM_ROOT}/AirLib/deps/eigen3)
+
+    find_package(Eigen REQUIRED)
+    include_directories(${EIGEN_INCLUDE_DIRS})
 endmacro(IncludeEigen)
 
 macro(AddExecutableSource)
@@ -24,8 +26,12 @@ macro(SetupConsoleBuild)
 endmacro(SetupConsoleBuild)
 
 macro(CommonSetup)
+    message(STATUS "Running CommonSetup...")
+
     find_package(Threads REQUIRED)
-    find_path(AIRSIM_ROOT NAMES AirSim.sln PATHS ".." "../.." "../../.." "../../../.." "../../../../.." "../../../../../.." REQUIRED)
+
+    find_path(AIRSIM_ROOT NAMES AirSim.sln PATHS ".." "../.." "../../.." "../../../.." "../../../../.." "../../../../../..")
+    message(STATUS "found AIRSIM_ROOT=${AIRSIM_ROOT}")
 
     #setup output paths
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/lib)
@@ -44,22 +50,19 @@ macro(CommonSetup)
     IF(UNIX)
         set(RPC_LIB_DEFINES "-D MSGPACK_PP_VARIADICS_MSVC=0")
         set(BUILD_TYPE "linux")
-        set(CMAKE_CXX_STANDARD 17)
-
         if (APPLE)
+            set(CMAKE_CXX_STANDARD 17)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wstrict-aliasing -D__CLANG__")
         else ()
             set(CMAKE_CXX_FLAGS "\
-                -Wall -Wextra \
-                -Wnon-virtual-dtor -Woverloaded-virtual \
-                -Wno-variadic-macros -Wno-unused-function -Wno-unused \
+                -std=c++17 -ggdb -Wall -Wextra \
+                -Wno-variadic-macros -Wno-parentheses -Wno-unused-function -Wno-unused \
                 -pthread \
                 ${RPC_LIB_DEFINES} ${CMAKE_CXX_FLAGS}")
 
             if (${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
                 set(CMAKE_CXX_FLAGS "-stdlib=libc++ -Wno-documentation -Wno-unknown-warning-option ${CMAKE_CXX_FLAGS}")
-                find_package(LLVM REQUIRED CONFIG)
-                set(CXX_EXP_LIB "-L${LLVM_LIBRARY_DIRS} -lc++fs -ferror-limit=10")
+                set(CXX_EXP_LIB "-lc++fs -ferror-limit=10")
             else()
                 set(CXX_EXP_LIB "-lstdc++fs -fmax-errors=10 -Wnoexcept -Wstrict-null-sentinel")
             endif ()

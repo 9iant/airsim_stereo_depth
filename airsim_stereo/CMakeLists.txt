@@ -23,6 +23,16 @@ set(RPC_LIB_INCLUDES " ${AIRSIM_ROOT}/external/rpclib/rpclib-2.3.0/include")
 set(RPC_LIB rpc) # name of .a file with lib prefix
 message(STATUS "found RPC_LIB_INCLUDES=${RPC_LIB_INCLUDES}")
 
+# todo eigen3 in AirLib already
+# find_package(Eigen3 REQUIRED) 
+find_package(Boost REQUIRED)
+find_package(OpenCV REQUIRED)
+
+set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-11.4")
+find_package(CUDA 11.4 REQUIRED)
+
+find_package(Eigen3 REQUIRED)
+
 set(CUDA_NVCC_FLAGS
         ${CUDA_NVCC_FLAGS};
         -O3
@@ -33,13 +43,6 @@ set(CUDA_NVCC_FLAGS
 message("CUDA Libs: ${CUDA_LIBRARIES}")
 message("CUDA Headers: ${CUDA_INCLUDE_DIRS}")
 message("CUDA curand library: ${CUDA_curand_LIBRARY}")
-
-# todo eigen3 in AirLib already
-# find_package(Eigen3 REQUIRED) 
-find_package(Boost REQUIRED)
-find_package(OpenCV REQUIRED)
-find_package(CUDA REQUIRED)
-
 
 find_package(catkin REQUIRED COMPONENTS
   cv_bridge
