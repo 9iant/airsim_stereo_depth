@@ -7,12 +7,14 @@ check ``settings.json`` and replace the settings for cameras into your airsim se
 run airsim simulator and
 ```rosrun airsim_stereo airsim_stereo```
 
+![example1](./image/test1.gif)
+![example1](./image/test2.gif)
 ## Caution
 This code is roughly designed for research purposes, so the camera settings are hard-coded in ``airsim_stereo.cpp``.
-The implementation of retrieving settings from AirSim is planned for the future.
 
 Check your CUDA version and modify ``CMakeLists.txt``.
 usually ``find_package(CUDA REQUIRED)`` will be fine.
 
-
+## Future work
+Retrieving settings from AirSim
 
