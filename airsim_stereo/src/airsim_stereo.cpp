@@ -101,11 +101,15 @@ int main(int argc, char** argv) {
   int img_rows_;
   double rgb_fov_deg_;
   double stereo_baseline_;
-
-  nh_private.param("img_cols", img_cols_, 320);
-  nh_private.param("img_rows", img_rows_, 240);
-  nh_private.param("rgb_fov_deg", rgb_fov_deg_, 90.0);
-  nh_private.param("stereo_baseline", stereo_baseline_, 0.1);
+  std::string cam1;
+  std::string cam2;
+    
+    nh_private.param("img_cols", img_cols_, 320);
+    nh_private.param("img_rows", img_rows_, 240);
+    nh_private.param("rgb_fov_deg", rgb_fov_deg_, 90.0);
+    nh_private.param("stereo_baseline", stereo_baseline_, 0.1);
+    nh_private.param("cam1", cam1, std::string("front_left"));
+    nh_private.param("cam2", cam2, std::string("front_right"));
 
   std::shared_ptr<sgm_gpu::SgmGpu> sgm_;
   sgm_.reset(new sgm_gpu::SgmGpu(nh_private, img_cols_, img_rows_));
@@ -124,8 +128,8 @@ int main(int argc, char** argv) {
   std::cout << "connected!" << std::endl;
 
   const std::vector<ImageRequest> request{
-      ImageRequest("front_left", ImageType::Scene),
-      ImageRequest("front_right", ImageType::Scene)};
+      ImageRequest(cam1, ImageType::Scene),
+      ImageRequest(cam2, ImageType::Scene)};
 
   while (ros::ok()) {
     // start time
