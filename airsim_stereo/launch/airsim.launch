@@ -1,0 +1,4 @@
+<launch>
+	<node name="airsim_stereo" pkg="airsim_stereo" type="airsim_stereo" output="screen"/>
+</launch>
+

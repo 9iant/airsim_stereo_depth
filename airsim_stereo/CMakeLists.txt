@@ -28,8 +28,8 @@ message(STATUS "found RPC_LIB_INCLUDES=${RPC_LIB_INCLUDES}")
 find_package(Boost REQUIRED)
 find_package(OpenCV REQUIRED)
 
-set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-11.4")
-find_package(CUDA 11.4 REQUIRED)
+set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-12.2")
+find_package(CUDA REQUIRED)
 
 find_package(Eigen3 REQUIRED)
 
@@ -37,8 +37,8 @@ set(CUDA_NVCC_FLAGS
         ${CUDA_NVCC_FLAGS};
         -O3
         -gencode=arch=compute_75,code=sm_75
-        -gencode=arch=compute_80,code=sm_80
-        -gencode=arch=compute_86,code=sm_86
+        # -gencode=arch=compute_80,code=sm_80
+        # -gencode=arch=compute_86,code=sm_86
         )
 message("CUDA Libs: ${CUDA_LIBRARIES}")
 message("CUDA Headers: ${CUDA_INCLUDE_DIRS}")
@@ -83,6 +83,9 @@ include_directories(
   ${Boost_INCLUDE_DIRS}
 )
 
+install(DIRECTORY launch
+	DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
 
 cuda_add_library(sgm_gpu
         src/sgm_gpu/sgm_gpu.cu
