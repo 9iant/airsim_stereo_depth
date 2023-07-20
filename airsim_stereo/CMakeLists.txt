@@ -28,6 +28,7 @@ message(STATUS "found RPC_LIB_INCLUDES=${RPC_LIB_INCLUDES}")
 find_package(Boost REQUIRED)
 find_package(OpenCV REQUIRED)
 
+# you must change this cuda-version
 set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-12.2")
 find_package(CUDA REQUIRED)
 
