@@ -5,12 +5,13 @@ The implementation of ``sgm_gpu`` was obtained from [agile_autonomy](https://git
 ## How to use
 check ``settings.json`` and replace the settings for cameras into your airsim settings.
 run airsim simulator and
-```rosrun airsim_stereo airsim_stereo```
+```roslaunch airsim_stereo airsim_stereo.launch```
 
 ![example1](./image/test1.gif)
 ![example1](./image/test2.gif)
 ## Caution
-This code is roughly designed for research purposes, so the camera settings are hard-coded in ``airsim_stereo.cpp``.
+This code is roughly designed for research purposes.
+Adjust the camera settings in ``airsim_stereo.launch`` to align with your AirSim configurations in ``settings.json``
 
 Check your CUDA version and modify ``CMakeLists.txt``.
 usually ``find_package(CUDA REQUIRED)`` will be fine.

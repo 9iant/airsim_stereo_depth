@@ -103,13 +103,20 @@ int main(int argc, char** argv) {
   double stereo_baseline_;
   std::string cam1;
   std::string cam2;
-    
-    nh_private.param("img_cols", img_cols_, 320);
-    nh_private.param("img_rows", img_rows_, 240);
-    nh_private.param("rgb_fov_deg", rgb_fov_deg_, 90.0);
-    nh_private.param("stereo_baseline", stereo_baseline_, 0.1);
-    nh_private.param("cam1", cam1, std::string("front_left"));
-    nh_private.param("cam2", cam2, std::string("front_right"));
+
+  nh_private.param("img_cols", img_cols_, 320);
+  nh_private.param("img_rows", img_rows_, 240);
+  nh_private.param("rgb_fov_deg", rgb_fov_deg_, 90.0);
+  nh_private.param("stereo_baseline", stereo_baseline_, 0.1);
+  nh_private.param("cam1", cam1, std::string("front_left"));
+  nh_private.param("cam2", cam2, std::string("front_right"));
+
+  std::cout << "img_cols: " << img_cols_ << std::endl;
+  std::cout << "img_rows: " << img_rows_ << std::endl;
+  std::cout << "rgb_fov_deg: " << rgb_fov_deg_ << std::endl;
+  std::cout << "stereo_baseline: " << stereo_baseline_ << std::endl;
+  std::cout << "cam1: " << cam1 << std::endl;
+  std::cout << "cam2: " << cam2 << std::endl;
 
   std::shared_ptr<sgm_gpu::SgmGpu> sgm_;
   sgm_.reset(new sgm_gpu::SgmGpu(nh_private, img_cols_, img_rows_));
@@ -125,38 +132,50 @@ int main(int argc, char** argv) {
 
   client.confirmConnection();
 
-  std::cout << "connected!" << std::endl;
-
-  const std::vector<ImageRequest> request{
-      ImageRequest(cam1, ImageType::Scene),
-      ImageRequest(cam2, ImageType::Scene)};
+  const std::vector<ImageRequest> request{ImageRequest(cam1, ImageType::Scene),
+                                          ImageRequest(cam2, ImageType::Scene)};
+  cv::Mat disparity(img_rows_, img_cols_, CV_8UC1);
 
   while (ros::ok()) {
-    // start time
     std::chrono::steady_clock::time_point begin_time =
         std::chrono::steady_clock::now();
 
-    const std::vector<ImageResponse>& response = client.simGetImages(request);
+    const std::vector<ImageResponse>&& response = client.simGetImages(request);
+
+    if (response.size() < 2) {
+      std::cerr
+          << "Error: Insufficient number of images received from the simulator."
+          << std::endl;
+      break;  // Exit the loop if we don't have both left and right images.
+    }
 
     std::chrono::steady_clock::time_point after_get_image =
         std::chrono::steady_clock::now();
 
-    const ImageResponse& left_image = response.at(0);
-    const ImageResponse& right_image = response.at(1);
-
     cv::Mat left_mat =
-        cv::imdecode(left_image.image_data_uint8, cv::IMREAD_COLOR);
+        cv::imdecode(response.at(0).image_data_uint8, cv::IMREAD_COLOR);
     cv::Mat right_mat =
-        cv::imdecode(right_image.image_data_uint8, cv::IMREAD_COLOR);
+        cv::imdecode(response.at(1).image_data_uint8, cv::IMREAD_COLOR);
+
+    if (left_mat.empty() || right_mat.empty()) {
+      std::cerr << "Error: Failed to decode left or right images." << std::endl;
+      break;  // Exit the loop if image decoding fails.
+    }
     // cv::imshow("left", left_mat);
     // cv::imshow("right", right_mat);
     // cv::waitKey(1);
 
     // compute depth
     // ros::WallTime start_disp_comp = ros::WallTime::now();
-    cv::Mat disparity(img_rows_, img_cols_, CV_8UC1);
-    sgm_->computeDisparity(left_mat, right_mat, &disparity);
-    disparity.convertTo(disparity, CV_32FC1);
+
+    // cv::Mat disparity(img_rows_, img_cols_, CV_8UC1);
+    // cv::Mat disparity_f;
+
+    cv::Mat disparity_(img_rows_, img_cols_, CV_8UC1);
+    cv::Mat disparity;
+    sgm_->computeDisparity(left_mat, right_mat, &disparity_);
+
+    disparity_.convertTo(disparity, CV_32FC1);
 
     // compute depth from disparity
     cv::Mat depth_float(img_rows_, img_cols_, CV_32FC1);
@@ -164,24 +183,24 @@ int main(int argc, char** argv) {
 
     float f =
         (img_cols_ / 2.0) / std::tan((M_PI * (rgb_fov_deg_ / 180.0)) / 2.0);
-    //  depth = static_cast<float>(stereo_baseline_) * f / disparity;
+
     for (int r = 0; r < img_rows_; ++r) {
       for (int c = 0; c < img_cols_; ++c) {
-        if (disparity.at<float>(r, c) == 0.0f) {
-          depth_float.at<float>(r, c) = 0.0f;
-          depth_uint16.at<unsigned short>(r, c) = 0;
-        } else if (disparity.at<float>(r, c) == 255.0f) {
+        float disparity_val = disparity.at<float>(r, c);
+
+        if (disparity_val == 0.0f || disparity_val == 255.0f) {
           depth_float.at<float>(r, c) = 0.0f;
           depth_uint16.at<unsigned short>(r, c) = 0;
         } else {
-          depth_float.at<float>(r, c) = static_cast<float>(stereo_baseline_) *
-                                        f / disparity.at<float>(r, c);
+          depth_float.at<float>(r, c) =
+              static_cast<float>(stereo_baseline_) * f / disparity_val;
           depth_uint16.at<unsigned short>(r, c) = static_cast<unsigned short>(
               1000.0 * static_cast<float>(stereo_baseline_) * f /
-              disparity.at<float>(r, c));
+              disparity_val);
         }
       }
     }
+
     // double disp_comp_duration =
     //     (ros::WallTime::now() - start_disp_comp).toSec();
 

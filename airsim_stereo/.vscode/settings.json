@@ -59,6 +59,7 @@
         "bit": "cpp",
         "list": "cpp",
         "typeindex": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "*.ipp": "cpp"
     }
 }

@@ -1,0 +1,12 @@
+<launch>
+    <node name="airsim_stereo" pkg="airsim_stereo" type="airsim_stereo" output="screen">
+        <rosparam>
+            img_cols: 640
+            img_rows: 480
+            rgb_fov_deg: 90.0
+            stereo_baseline: 0.1
+            cam1: "front_left"
+            cam2: "front_right"
+        </rosparam>
+    </node>
+</launch>

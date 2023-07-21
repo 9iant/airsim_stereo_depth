@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.0.2)
 project(airsim_stereo)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+# add_compile_options(-std=c++17)
+add_compile_options(-std=c++17 -g)
 
 # set this to path to AirSim root folder if you want your catkin workspace in a custom directory
 set(AIRSIM_ROOT ${PROJECT_SOURCE_DIR}/../thirdparty)
@@ -29,7 +30,7 @@ find_package(Boost REQUIRED)
 find_package(OpenCV REQUIRED)
 
 # you must change this cuda-version
-set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-12.2")
+set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-11.4")
 find_package(CUDA REQUIRED)
 
 find_package(Eigen3 REQUIRED)
@@ -38,8 +39,8 @@ set(CUDA_NVCC_FLAGS
         ${CUDA_NVCC_FLAGS};
         -O3
         -gencode=arch=compute_75,code=sm_75
-        # -gencode=arch=compute_80,code=sm_80
-        # -gencode=arch=compute_86,code=sm_86
+        -gencode=arch=compute_80,code=sm_80
+        -gencode=arch=compute_86,code=sm_86
         )
 message("CUDA Libs: ${CUDA_LIBRARIES}")
 message("CUDA Headers: ${CUDA_INCLUDE_DIRS}")
