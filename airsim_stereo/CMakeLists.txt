@@ -30,7 +30,7 @@ find_package(Boost REQUIRED)
 find_package(OpenCV REQUIRED)
 
 # you must change this cuda-version
-set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-11.4")
+set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/cuda-12.8")
 find_package(CUDA REQUIRED)
 
 find_package(Eigen3 REQUIRED)
@@ -41,6 +41,7 @@ set(CUDA_NVCC_FLAGS
         -gencode=arch=compute_75,code=sm_75
         -gencode=arch=compute_80,code=sm_80
         -gencode=arch=compute_86,code=sm_86
+	-gencode=arch=compute_120,code=120
         )
 message("CUDA Libs: ${CUDA_LIBRARIES}")
 message("CUDA Headers: ${CUDA_INCLUDE_DIRS}")
